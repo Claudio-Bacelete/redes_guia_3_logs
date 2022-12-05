@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.redes.redes.Data.DetalheUsuario;
 import com.redes.redes.Model.TipoVeiculo;
+import com.redes.redes.Services.DetalheUsuarioServiceImpl;
 import com.redes.redes.Services.TipoVeiculoService;
 import com.redes.redes.Utils.WriteFile;
 
@@ -29,20 +31,30 @@ public class TipoVeiculoController {
     @Autowired
     WriteFile writeFile;
 
+    @Autowired
+    private DetalheUsuarioServiceImpl usuarioService;
+
     @ApiOperation(value = "Listar todos os tipos de Veículo com Fatores de Multiplicação")
     @GetMapping()
     public List<TipoVeiculo> findAllTipoVeiculos(Authentication auth) throws IOException {
-        writeFile.writeFile("Listar todos os tipos de veículos");
-        return service.getAllTipoVeiculos();
+        DetalheUsuario usuario = usuarioService.loadUserByUsername(auth.getName());
+        List<TipoVeiculo> listTipo = service.getAllTipoVeiculos();
+        writeFile.writeFile(
+                "Usuário " + usuario.getUsername() + " solicitou listagem de tipos de veículos \n"
+                        + listTipo.toString());
+        return listTipo;
     }
 
     @Transactional
     @ApiOperation(value = "Atualizar o fator de multiplicação de um tipo de veículo")
     @PostMapping(value = "/atualizarFator/{id}")
     public TipoVeiculo updateFatorMultiplicacao(@PathVariable(name = "id") Long id,
-            @RequestBody Float fatorMultiplicacao) throws IOException {
-        writeFile.writeFile("Atualizar o fator de multiplicação do veículo " + id);
-        return service.updateFatorMultiplicacao(id, fatorMultiplicacao);
+            @RequestBody Float fatorMultiplicacao, Authentication auth) throws IOException {
+        DetalheUsuario usuario = usuarioService.loadUserByUsername(auth.getName());
+        TipoVeiculo tipoVeiculo = service.updateFatorMultiplicacao(id, fatorMultiplicacao);
+        writeFile.writeFile("Usuário " + usuario.getUsername() + " atualizou o fator de multiplicação do veículo \n"
+                + tipoVeiculo.toString());
+        return tipoVeiculo;
     }
 
 }

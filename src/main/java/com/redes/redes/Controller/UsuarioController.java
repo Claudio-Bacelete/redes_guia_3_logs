@@ -39,7 +39,7 @@ public class UsuarioController {
         EmailDetails details = new EmailDetails(dto.getEmail(), "Seja Bem vindo !",
                 "Usuário Cadastrado !");
         emailService.sendSimpleMail(details);
-        writeFile.writeFile("Cadastrar Usuário");
+        writeFile.writeFile("Usuário " + usuario.getEmail() + " foi cadastrado ! \n");
         return usuario;
     }
 

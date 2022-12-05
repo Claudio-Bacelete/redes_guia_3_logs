@@ -56,27 +56,9 @@ public class VeiculoService {
     }
 
     public Veiculo DTOAndUserToEntity(VeiculoDTO veiculo, Usuario usuario) {
-        Veiculo novoVeiculo = new Veiculo();
-        List<TipoVeiculo> listVeiculo = tipoService.getAllTipoVeiculos();
-        for (TipoVeiculo tipoVeiculo : listVeiculo) {
-            if (veiculo.getTipoId().equals(tipoVeiculo.getId())) {
-                novoVeiculo.setTipoVeiculo(tipoVeiculo);
-            }
-        }
-        novoVeiculo.setDistEmRodoviaPavimentada(veiculo.getDistEmRodoviaPavimentada());
-        novoVeiculo.setDistEmRodoviaNaoPavimentada(veiculo.getDistEmRodoviaNaoPavimentada());
-        novoVeiculo.setCarga(veiculo.getCarga());
-        Float custoTotal = (veiculo.getDistEmRodoviaPavimentada() * 0.63f
-                + veiculo.getDistEmRodoviaNaoPavimentada() * 0.72f)
-                * novoVeiculo.getTipoVeiculo().getFatorDeMultiplicacao();
-        if (veiculo.getCarga() > 5) {
-            int diferencaDoLimite = veiculo.getCarga() - 5;
-            int somaKm = (veiculo.getDistEmRodoviaPavimentada() + veiculo.getDistEmRodoviaNaoPavimentada());
-            custoTotal += diferencaDoLimite * 0.03f * somaKm;
-        }
-        novoVeiculo.setUsuario(usuario);
-        novoVeiculo.setCustoTotal(custoTotal);
-        EmailDetails details = new EmailDetails(usuario.getEmail(), "O orçamento do transporte é: " + custoTotal,
+        Veiculo novoVeiculo = DTOToEntity(veiculo);
+        EmailDetails details = new EmailDetails(usuario.getEmail(),
+                "O orçamento do transporte é: " + novoVeiculo.getCustoTotal(),
                 "Orçamento de Transporte");
         emailService.sendSimpleMail(details);
 

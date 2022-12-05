@@ -39,30 +39,37 @@ public class VeiculoController {
     @ApiOperation(value = "Adicionar valores de Veículo")
     public Veiculo addVeiculo(Authentication auth, @RequestBody VeiculoDTO veiculoDTO) throws IOException {
         DetalheUsuario usuario = usuarioService.loadUserByUsername(auth.getName());
-
-        writeFile.writeFile("Criar veículo ");
-        return service.saveVeiculo(veiculoDTO, usuario);
+        Veiculo veiculo = service.saveVeiculo(veiculoDTO, usuario);
+        writeFile.writeFile("Usuário " + usuario.getUsername() + " criou o veículo \n" + veiculo.toString());
+        return veiculo;
     }
 
     @GetMapping
     @ApiOperation(value = "Listar todos os Veículos")
-    public List<Veiculo> findAllVeiculos() throws IOException {
-        writeFile.writeFile("Listar veículos ");
-        return service.getAllVeiculos();
+    public List<Veiculo> findAllVeiculos(Authentication auth) throws IOException {
+        DetalheUsuario usuario = usuarioService.loadUserByUsername(auth.getName());
+        List<Veiculo> listVeiculos = service.getAllVeiculos();
+        writeFile.writeFile("Usuário " + usuario.getUsername() + " solicitou listagem de tipos de veículo \n"
+                + listVeiculos.toString());
+        return listVeiculos;
     }
 
     @PostMapping(value = "/atualizar/{id}")
     @ApiOperation(value = "Atualizar valor do veículo")
-    public Veiculo updateVeiculo(@PathVariable(name = "id") Long id, @RequestBody VeiculoDTO veiculo)
+    public Veiculo updateVeiculo(@PathVariable(name = "id") Long id, @RequestBody VeiculoDTO dto,
+            Authentication auth)
             throws IOException {
-        writeFile.writeFile("Atualizar veículo de Id " + id);
-        return service.updateVeiculo(veiculo, id);
+        DetalheUsuario usuario = usuarioService.loadUserByUsername(auth.getName());
+        Veiculo veiculo = service.updateVeiculo(dto, id);
+        writeFile.writeFile("Usuário " + usuario.getUsername() + "atuliazou o veículo \n" + veiculo.toString());
+        return veiculo;
     }
 
     @DeleteMapping("/{id}")
     @ApiOperation(value = "Deletar o valor do veículo")
-    public String deleteVeiculo(@PathVariable long id) throws IOException {
-        writeFile.writeFile("Deletar veículo de Id " + id);
+    public String deleteVeiculo(@PathVariable long id, Authentication auth) throws IOException {
+        DetalheUsuario usuario = usuarioService.loadUserByUsername(auth.getName());
+        writeFile.writeFile("Usuário " + usuario.getUsername() + "deletou o veículo de Id " + id);
         return service.deletarVeiculo(id);
     }
 
