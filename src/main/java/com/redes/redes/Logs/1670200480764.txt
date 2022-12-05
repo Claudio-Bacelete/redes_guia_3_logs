@@ -1,0 +1,1 @@
+Ação: Usuário leclaudiohenrique@gmail.com criou o veículo Veiculo(id=0, tipoVeiculo=TipoVeiculo(id=3, descricao=Carreta simples, fatorDeMultiplicacao=1.13), carga=8, distEmRodoviaPavimentada=90, distEmRodoviaNaoPavimentada=0, custoTotal=72.171, usuario=Usuario(id=0, email=leclaudiohenrique@gmail.com, senha=$2a$10$PWGqlKQ487JoSj5A2IJ7zem0dcIt.yUaf8Fy4Co1wtz60x5QN.SA.))
