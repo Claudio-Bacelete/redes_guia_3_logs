@@ -61,7 +61,7 @@ public class VeiculoController {
             throws IOException {
         DetalheUsuario usuario = usuarioService.loadUserByUsername(auth.getName());
         Veiculo veiculo = service.updateVeiculo(dto, id);
-        writeFile.writeFile("Usuário " + usuario.getUsername() + "atuliazou o veículo \n" + veiculo.toString());
+        writeFile.writeFile("Usuário " + usuario.getUsername() + "atualizou o veículo \n" + veiculo.toString());
         return veiculo;
     }
 
